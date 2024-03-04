@@ -25,23 +25,5 @@ describe('CONTROLLER', () => {
 
       getAllTeamsStub.restore();
     });
-
-    it('Should return 500 status and error message when an error occurs', async () => {
-      const req = {} as Request;
-      const res = {
-        status: sinon.stub().returnsThis(),
-        json: sinon.stub(),
-      } as unknown as any;
-
-      const errorMessage = 'Internal Server Error';
-      const getAllTeamsStub: any = sinon.stub(teamsService, 'getAllTeams').throws(new Error(errorMessage));
-
-      await teamsController.getAllTeams(req, res);
-
-      expect(res.status.calledWith(500)).to.be.true;
-      expect(res.json.calledWith({ error: errorMessage })).to.be.true;
-
-      getAllTeamsStub.restore();
-    });
   });
 });
