@@ -8,3 +8,8 @@ export const getAllTeamsStubReturn = [
     teamName: 'Patos Ninjas Adolescentes Mutantes Futebol Clube',
   },
 ];
+
+export const findTeamByIdStubReturn = {
+  id: 1,
+  teamName: 'Xablau Futebol Clube',
+};

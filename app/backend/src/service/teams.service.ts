@@ -6,6 +6,12 @@ const getAllTeams = async ():Promise<ITeams[]> => {
   return allTeams;
 };
 
+const findTeamById = async (id: number):Promise<ITeams | null> => {
+  const team = await Teams.findByPk(id);
+  return team;
+};
+
 export default {
   getAllTeams,
+  findTeamById,
 };

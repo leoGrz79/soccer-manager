@@ -16,7 +16,7 @@ class App {
     this.app.get('/', (req, res) => res.json({ ok: true }));
     // this.app.get('/teams', (req, res) => res.json({ ok: true }));
     this.app.get('/teams', teamsController.getAllTeams);
-    // this.app.get('/teams/:id', teamsController.getAllTeams);
+    this.app.get('/teams/:id', teamsController.findTeamById);
 
     // Não remova esse middleware de erro, mas fique a vontade para customizá-lo
     // Mantenha ele sempre como o último middleware a ser chamado
