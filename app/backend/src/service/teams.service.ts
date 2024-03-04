@@ -8,7 +8,7 @@ const getAllTeams = async ():Promise<ITeams[]> => {
 
 const findTeamById = async (id: number):Promise<ITeams | null> => {
   const team = await Teams.findByPk(id);
-  return team;
+  return team?.dataValues || null;
 };
 
 export default {
