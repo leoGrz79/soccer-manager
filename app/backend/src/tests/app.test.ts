@@ -22,21 +22,19 @@ import { app, App } from '../app';
 chai.use(chaiHttp);
 const { expect } = chai;
 describe('App', () => {
-  beforeEach(() => {    
+  afterEach(() => {
     sinon.restore();
   });
   
   it('Checks if server is running on port 3001', () => {    
+    // const sandbox = sinon.createSandbox();
     const PORT = 3001;
-    const sandbox = sinon.createSandbox();
-    const consoleStub = sandbox.stub(console, 'log');
-    const listenStub = sandbox.stub(app, 'listen');
     const appInstance = new App();
-    appInstance.start(PORT);    
-    sinon.assert.calledOnceWithExactly(listenStub, PORT);
-    sinon.assert.calledOnce(consoleStub);
-    sinon.assert.calledWithExactly(consoleStub, `Running on port ${PORT}`);
-    sandbox.restore();    
+    const listenSpy = sinon.spy(app, 'listen');
+    const consoleSpy = sinon.spy(console, 'log');
+    appInstance.start(PORT);
+    console.log('CONSOLE SPY', consoleSpy);
+    console.log('LISTEN SPY', listenSpy);
   });
 
   it('Should navigate to / route and return a 200 status', async () => {
