@@ -7,7 +7,7 @@ import teamsController from '../controller/teams.controller';
 import { getAllTeamsStubReturn, findTeamByIdStubReturn } from './allMocks';
 
 
-describe('CONTROLLER', () => {
+describe('TEAMS CONTROLLER', () => {
   describe('Tests the getAllTeams function (Controller)', () => {
     it('Should return 2 teams', async () => {
       const req = {} as Request;

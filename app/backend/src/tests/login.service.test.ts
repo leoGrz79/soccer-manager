@@ -1,7 +1,7 @@
 import * as chai from 'chai';
 import * as sinon from 'sinon';
 import * as jwt from 'jsonwebtoken';
-import {expect} from 'chai';
+import { expect } from 'chai';
 import * as bcyrpt from 'bcryptjs';
 // @ts-ignore
 import chaiHttp = require('chai-http');
@@ -16,9 +16,10 @@ import chaiHttp = require('chai-http');
 // src/tests/app.test.ts:3:8 - error TS1259: Module '"/home/leogrz/dev/Trybe/moduloBackend/projetos/sd-034-trybe-futebol-clube/app/backend/node_modules/chai-http/types/index"' can only be default-imported using the 'esModuleInterop' flag
 
 import Users from '../database/models/users.models';
-import { authValidStubReturn } from './allMocks';
+import { authValidStubReturn, roleStubReturn } from './allMocks';
 
 import { app } from '../app';
+import loginService from '../service/login.service';
 chai.use(chaiHttp);
 
 const INVALID_EMAIL = '@user.com';
@@ -28,10 +29,10 @@ const VALID_EMAIL = 'user@user.com';
 const VALID_PASSWORD = 'secret_user';
 const INVALID_EMAIL_PASSWORD_MESSAGE = 'Invalid email or password';
 const ALL_FIELDS_MUST_BE_FILLED_MESSAGE = 'All fields must be filled';
-const STUB_BODY_VALID = { email: VALID_EMAIL, password: VALID_PASSWORD};
-const STUB_INVALID_EMAIL_BODY = { email: INVALID_EMAIL, password: VALID_PASSWORD};
-const STUB_EMPTY_EMAIL_BODY = { email: EMPTY_EMAIL, password: VALID_PASSWORD};
-const STUB_EMPTY_PASSWORD_BODY = { email: VALID_EMAIL, password: EMPTY_PASSWORD};
+const STUB_BODY_VALID = { email: VALID_EMAIL, password: VALID_PASSWORD };
+const STUB_INVALID_EMAIL_BODY = { email: INVALID_EMAIL, password: VALID_PASSWORD };
+const STUB_EMPTY_EMAIL_BODY = { email: EMPTY_EMAIL, password: VALID_PASSWORD };
+const STUB_EMPTY_PASSWORD_BODY = { email: VALID_EMAIL, password: EMPTY_PASSWORD };
 
 describe('LOGIN SERVICE', () => {
   afterEach(() => {
@@ -55,7 +56,7 @@ describe('LOGIN SERVICE', () => {
       sinon.stub(Users, 'findOne').resolves(null);
       const result = await chai.request(app).post('/login').send(STUB_INVALID_EMAIL_BODY);
       expect(result.status).to.equal(401);
-      expect(result.body).to.deep.equal({ message: INVALID_EMAIL_PASSWORD_MESSAGE });    
+      expect(result.body).to.deep.equal({ message: INVALID_EMAIL_PASSWORD_MESSAGE });
     });
 
     it('Should return status 200 and a token if login is successful', async () => {
@@ -76,5 +77,18 @@ describe('LOGIN SERVICE', () => {
     //   .equal({"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidXNlckB1c2VyLmNvbSIsImlhdCI6MTcwOTY4MTgyMCwiZXhwIjoxNzA5Njg1NDIwfQ.tKwAmTO2GMNfSt4CcRXKDx8aP3bFP6kWCcHK_T5Eg4Q"});
     //   expect(result.status).to.equal(200);
     // });
+  });
+  describe('Tests the getUserRole function', () => {
+    it('Should return no role', async () => {
+      sinon.stub(Users, 'findOne').resolves(null);
+      const getUserRole = await loginService.getUserRole('user');
+      expect(getUserRole).to.equal(null);
+    });
+
+    it('Should return the user role', async () => {
+      sinon.stub(Users, 'findOne').resolves(roleStubReturn as any);
+      const getUserRole = await loginService.getUserRole('user');
+      expect(getUserRole).to.equal('role');
+    });
   });
 });

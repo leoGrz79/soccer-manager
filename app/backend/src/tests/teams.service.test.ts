@@ -5,7 +5,7 @@ import teamsService from '../service/teams.service';
 import Teams from '../database/models/teams.model';
 import { getAllTeamsStubReturn, findTeamByIdStubReturn } from './allMocks';
 
-describe('SERVICES', () => {
+describe('TEAMS SERVICES', () => {
   describe('Tests the getAllTeams function (Service)', () => {
     it('Should return 2 teams (Xablau FC e Patos Ninjas Adolescentes Mutantes Futebol Clube)', async () => {
       const geatAllTeamsStub: any = sinon.stub(Teams, 'findAll').resolves(getAllTeamsStubReturn as unknown as any);

@@ -42,7 +42,6 @@ const getUserRole = async (req: Request, res: Response) => {
   const authToken = auth.split(' ')[1];
   try {
     const username = jwt.verify(authToken, JWT_SECRET) as { username: string };
-    console.log('OLHA O BAIANO AQUI!!!', username.username);
     const role = await loginService.getUserRole(username.username);
     if (!role) {
       return res.status(401).json({ message: TOKEN_MUST_BE_VALID });

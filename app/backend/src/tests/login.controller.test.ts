@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import * as sinon from 'sinon';
 import loginService from '../service/login.service';
 import loginController from '../controller/login.controller';
+import * as jwt from 'jsonwebtoken';
 
 describe('LOGIN CONTROLLER', () => {
   afterEach(() => {
@@ -62,4 +63,31 @@ describe('LOGIN CONTROLLER', () => {
       expect(res.json.calledWith({ message: 'Invalid email or password' })).to.be.true;
     });
   });
-});
+  describe('Tests the getUserRole function', () => {
+    it('Should return status 200 and a role if login is successful', async () => {
+      const req: any =
+        {
+          headers: {
+            authorization: 'Bearer token'
+          }
+        } as any;
+      const res: any =
+        {
+          status: sinon.stub().returnsThis(), json: sinon.stub()
+        } as unknown as any;
+
+      const userName: any = { username: 'user' };
+      const userRole = 'role';
+
+      sinon.stub(jwt, 'verify').returns(userName);
+      sinon.stub(loginService, 'getUserRole').resolves(userRole);
+
+      await loginController.getUserRole(req, res);
+
+      expect(res.status.calledWith(200)).to.be.true;
+      expect(res.json.calledWith({ role: 'role' })).to.be.true;
+
+      sinon.restore();
+    });
+  });
+})
