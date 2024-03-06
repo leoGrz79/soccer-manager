@@ -6,14 +6,22 @@ const JWT_SECRET = 'jwt_secret';
 const INVALID_EMAIL_PASSWORD = 'Invalid email or password';
 const ALL_FIELDS_MUST_BE_FILLED = 'All fields must be filled';
 
-const createToken = (user: string) => {
-  const token = jwt.sign({ user }, JWT_SECRET as string, { expiresIn: '1h' });
+const createToken = (username: string) => {
+  const token = jwt.sign({ username }, JWT_SECRET as string, { expiresIn: '1h' });
   return token;
 };
 
 const isEmailValid = (email: string) => {
   const emailRegex = /\S+@\S+\.\S+/;
   return emailRegex.test(email);
+};
+
+const getUserRole = async (username: string) => {
+  const appUser = await Users.findOne({ where: { username } });
+  if (!appUser) {
+    return null;
+  }
+  return appUser.role;
 };
 
 const findUserByEmail = async (email: string) => {
@@ -35,7 +43,7 @@ const userLogin = async (email: string, password: string) => {
     if (!checkPassword || password.length < 6) {
       return { status: 401, message: INVALID_EMAIL_PASSWORD };
     }
-    const token = createToken(user.email);
+    const token = createToken(user.username);
     return { status: 200, token };
   }
   return { status: 401, message: INVALID_EMAIL_PASSWORD };
@@ -44,4 +52,5 @@ const userLogin = async (email: string, password: string) => {
 export default {
   userLogin,
   createToken,
+  getUserRole,
 };

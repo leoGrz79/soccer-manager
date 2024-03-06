@@ -19,6 +19,7 @@ class App {
     this.app.get('/teams', teamsController.getAllTeams);
     this.app.get('/teams/:id', teamsController.findTeamById);
     this.app.post('/login', loginController.login);
+    this.app.get('/login/role', loginController.getUserRole);
 
     // Não remova esse middleware de erro, mas fique a vontade para customizá-lo
     // Mantenha ele sempre como o último middleware a ser chamado
