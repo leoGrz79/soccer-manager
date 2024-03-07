@@ -5,6 +5,7 @@ import errorMiddleware from './middlewares/errorMiddleware';
 import teamsController from './controller/teams.controller';
 import loginController from './controller/login.controller';
 import matchesController from './controller/matches.controller';
+import validateTokenMiddleware from './middlewares/validateToken.middleware';
 
 class App {
   public app: express.Express;
@@ -16,11 +17,10 @@ class App {
 
     // Não remover essa rota
     this.app.get('/', (req, res) => res.json({ ok: true }));
-    // this.app.get('/teams', (req, res) => res.json({ ok: true }));
     this.app.get('/teams', teamsController.getAllTeams);
     this.app.get('/teams/:id', teamsController.findTeamById);
     this.app.post('/login', loginController.login);
-    this.app.get('/login/role', loginController.getUserRole);
+    this.app.get('/login/role', validateTokenMiddleware, loginController.getUserRole);
     this.app.get('/matches', matchesController.getAllMatchesAndTeams);
 
     // Não remova esse middleware de erro, mas fique a vontade para customizá-lo

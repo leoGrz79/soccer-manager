@@ -17,27 +17,11 @@ const login = async (req: Request, res: Response) => {
   return res.status(loginResponse.status).json({ token: loginResponse.token });
 };
 
-const validateToken = (req: Request, res: Response) => {
-  const auth = req.headers.authorization;
-  if (!auth) {
-    return res.status(401).json({ message: TOKEN_NOT_FOUND });
-  }
-
-  const authToken = auth.split(' ')[1];
-  try {
-    jwt.verify(authToken, JWT_SECRET);
-  } catch (e) {
-    return res.status(401).json({ message: TOKEN_MUST_BE_VALID });
-  }
-};
-
 const getUserRole = async (req: Request, res: Response) => {
   const auth = req.headers.authorization;
   if (!auth) {
     return res.status(401).json({ message: TOKEN_NOT_FOUND });
   }
-
-  validateToken(req, res);
 
   const authToken = auth.split(' ')[1];
   try {
@@ -53,5 +37,5 @@ const getUserRole = async (req: Request, res: Response) => {
 };
 
 export default {
-  login, validateToken, getUserRole,
+  login, getUserRole,
 };
