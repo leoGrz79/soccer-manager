@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
 import matchesService from '../service/matches.service';
-
+// só pra comittar
 const JWT_SECRET = 'jwt_secret';
 const TOKEN_MUST_BE_VALID = 'Token must be a valid token';
 const TOKEN_NOT_FOUND = 'Token not found';
