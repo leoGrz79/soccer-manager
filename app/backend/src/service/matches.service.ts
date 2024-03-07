@@ -1,6 +1,7 @@
 import Matches from '../database/models/matches.model';
 import Teams from '../database/models/teams.model';
 import ITeams from '../Interfaces/ITeams';
+import { IMatchesAndTeams } from '../Interfaces/IMatches';
 
 const getAllMatches = async () => {
   const allMatches = await Matches.findAll();
@@ -12,7 +13,7 @@ const getAllTeams = async ():Promise<ITeams[]> => {
   return allTeams;
 };
 
-const getMatchesAndTeams = async ():Promise<any[]> => {
+const getMatchesAndTeams = async ():Promise<IMatchesAndTeams[]> => {
   const allMatches = await getAllMatches();
   const allTeams = await getAllTeams();
 

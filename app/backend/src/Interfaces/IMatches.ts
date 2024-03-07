@@ -8,12 +8,12 @@ export interface IMatches {
 }
 
 export interface IMatchesAndTeams {
-  id: number | undefined,
-  homeTeamId: string | undefined,
+  id: number,
+  homeTeamId: number | undefined,
   homeTeamGoals: number,
-  awayTeamId: string | undefined,
-  awayTeamGoals: number | undefined,
-  inProgress: boolean | undefined,
+  awayTeamId: number | undefined,
+  awayTeamGoals: number,
+  inProgress: boolean,
   homeTeam: {
     teamName: string | undefined,
   },
