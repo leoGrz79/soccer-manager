@@ -89,5 +89,69 @@ describe('LOGIN CONTROLLER', () => {
 
       sinon.restore();
     });
+
+    it('Should return status 401 and an error message if token is not found', async () => {
+      const req: any = {
+        headers: {},
+      };
+
+      const res: any = {
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub(),
+      };
+
+      await loginController.getUserRole(req, res);
+
+      expect(res.status.calledWith(401)).to.be.true;
+      expect(res.json.calledWith({ message: 'Token not found' })).to.be.true;
+
+      sinon.restore();
+    });
+
+    it('Should return status 401 and an error message if token is invalid', async () => {
+      const req: any = {
+        headers: {
+          authorization: 'Bearer invalidtoken',
+        },
+      };
+
+      const res: any = {
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub(),
+      };
+
+      sinon.stub(jwt, 'verify').throws(new Error('Token must be valid'));
+
+      await loginController.getUserRole(req, res);
+
+      expect(res.status.calledWith(401)).to.be.true;
+
+      sinon.restore();
+    });
+
+    it('Should return status 401 and an error message if role is not found', async () => {
+      const req: any =
+        {
+          headers: {
+            authorization: 'Bearer token'
+          }
+        } as any;
+      const res: any =
+        {
+          status: sinon.stub().returnsThis(), json: sinon.stub()
+        } as unknown as any;
+
+      const userName: any = { username: 'user' };
+
+      sinon.stub(jwt, 'verify').returns(userName);
+      sinon.stub(loginService, 'getUserRole').resolves(null);
+
+      await loginController.getUserRole(req, res);
+
+      expect(res.status.calledWith(401)).to.be.true;
+
+      sinon.restore();
+    });
+
   });
 })
