@@ -1,19 +1,17 @@
 import Matches from '../database/models/matches.model';
 import Teams from '../database/models/teams.model';
-import ITeams from '../Interfaces/ITeams';
-import { IMatchesAndTeams } from '../Interfaces/IMatches';
 
 const getAllMatches = async () => {
   const allMatches = await Matches.findAll();
   return allMatches;
 };
 
-const getAllTeams = async ():Promise<ITeams[]> => {
+const getAllTeams = async () => {
   const allTeams = await Teams.findAll();
   return allTeams;
 };
 
-const getMatchesAndTeams = async ():Promise<IMatchesAndTeams[]> => {
+const getMatchesAndTeams = async () => {
   const allMatches = await getAllMatches();
   const allTeams = await getAllTeams();
 
@@ -34,7 +32,19 @@ const getMatchesAndTeams = async ():Promise<IMatchesAndTeams[]> => {
   return MatchesAndTeams;
 };
 
+const getInProgressMatches = async (status: string) => {
+  let inProgressMatches;
+  if (status === 'true' || status === 'false') {
+    const matchesAndTeams = await getMatchesAndTeams();
+    inProgressMatches = matchesAndTeams.filter((match) => match.inProgress === (status === 'true'));
+  } else {
+    inProgressMatches = await Matches.findAll();
+  }
+  return inProgressMatches;
+};
+
 export default {
   getAllMatches,
   getMatchesAndTeams,
+  getInProgressMatches,
 };

@@ -21,7 +21,7 @@ class App {
     this.app.get('/teams/:id', teamsController.findTeamById);
     this.app.post('/login', loginController.login);
     this.app.get('/login/role', validateTokenMiddleware, loginController.getUserRole);
-    this.app.get('/matches', matchesController.getAllMatchesAndTeams);
+    this.app.get('/matches', matchesController.getInProgressMatches);
 
     // Não remova esse middleware de erro, mas fique a vontade para customizá-lo
     // Mantenha ele sempre como o último middleware a ser chamado
