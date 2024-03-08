@@ -22,6 +22,9 @@ class App {
     this.app.post('/login', loginController.login);
     this.app.get('/login/role', validateTokenMiddleware, loginController.getUserRole);
     this.app.get('/matches', matchesController.getInProgressMatches);
+    this.app.post('/matches', validateTokenMiddleware, matchesController.addMatch);
+    this.app.patch('/matches/:id/finish', validateTokenMiddleware, matchesController.endMatch);
+    this.app.patch('/matches/:id', validateTokenMiddleware, matchesController.changeMatch);
 
     // Não remova esse middleware de erro, mas fique a vontade para customizá-lo
     // Mantenha ele sempre como o último middleware a ser chamado

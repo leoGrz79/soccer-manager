@@ -43,8 +43,54 @@ const getInProgressMatches = async (status: string) => {
   return inProgressMatches;
 };
 
+const endMatch = async (id: number) => {
+  const match = await Matches.update({ inProgress: false }, { where: { id } });
+  return match;
+};
+
+const changeMatch = async (id: number, homeTeamGoals: number, awayTeamGoals: number) => {
+  const match = await Matches.update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
+  return match;
+};
+
+const checkTeams = async (homeTeamId: number, awayTeamId: number) => {
+  if (homeTeamId === awayTeamId) {
+    return { status: 422, message: 'It is not possible to create a match with two equal teams' };
+  }
+  const homeTeam = await Teams.findOne({ where: { id: homeTeamId } });
+  const awayTeam = await Teams.findOne({ where: { id: awayTeamId } });
+  if (!homeTeam || !awayTeam) {
+    return { status: 404, message: 'There is no team with such id!' };
+  }
+  return { status: 201 };
+};
+
+const addMatch = async (
+  homeTeamId: number,
+  awayTeamId: number,
+  homeTeamGoals: number,
+  awayTeamGoals: number,
+) => {
+  const { status, message } = await checkTeams(homeTeamId, awayTeamId);
+  const getAllMatchesFromDB = await Matches.findAll();
+  const id = getAllMatchesFromDB.length + 1;
+  const match = await Matches.create({
+    id,
+    homeTeamId,
+    awayTeamId,
+    homeTeamGoals,
+    awayTeamGoals,
+    inProgress: true,
+  });
+  if (status !== 201) return { status, message };
+  return { status: 201, match };
+};
+
 export default {
   getAllMatches,
   getMatchesAndTeams,
   getInProgressMatches,
+  endMatch,
+  changeMatch,
+  addMatch,
 };

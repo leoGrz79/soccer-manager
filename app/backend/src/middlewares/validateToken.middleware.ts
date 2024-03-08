@@ -14,7 +14,7 @@ const validateTokenMiddleware = (req: Request, res: Response, next: NextFunction
   const authToken = auth.split(' ')[1];
   try {
     jwt.verify(authToken, JWT_SECRET);
-    next(); // Proceed to the next middleware
+    next();
   } catch (e) {
     return res.status(401).json({ message: TOKEN_MUST_BE_VALID });
   }
