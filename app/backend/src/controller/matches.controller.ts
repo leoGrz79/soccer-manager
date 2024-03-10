@@ -5,21 +5,13 @@ const TOKEN_MUST_BE_VALID = 'Token must be a valid token';
 
 const getInProgressMatches = async (req: Request, res: Response) => {
   const { inProgress } = req.query;
-  if (inProgress !== undefined) {
-    try {
-      const inProgressMatches = await matchesService.getInProgressMatches(inProgress as string);
-      return res.status(200).json(inProgressMatches);
-    } catch (error) {
-      return res.status(401).json({ message: TOKEN_MUST_BE_VALID });
-    }
-  } else {
-    try {
-      const matchesAndTeams = await matchesService.getMatchesAndTeams();
-      return res.status(200).json(matchesAndTeams);
-    } catch (error) {
-      return res.status(401).json({ message: TOKEN_MUST_BE_VALID });
-    }
+  if (!inProgress) {
+    const result = await matchesService.getMatchesAndTeams();
+    return res.status(200).json(result);
   }
+  const convert = inProgress === 'true';
+  const inProgressMatches = await matchesService.getInProgressMatches(convert);
+  return res.status(200).json(inProgressMatches);
 };
 
 const endMatch = async (req: Request, res: Response) => {
@@ -44,20 +36,12 @@ const changeMatch = async (req: Request, res: Response) => {
 };
 
 const addMatch = async (req: Request, res: Response) => {
-  const {
-    homeTeamId,
-    awayTeamId,
-    homeTeamGoals,
-    awayTeamGoals,
-  } = req.body;
+  const { homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals } = req.body;
 
   try {
     const { status, message, match } = await matchesService
       .addMatch(homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals);
-
-    if (message) {
-      return res.status(status).json({ message });
-    }
+    if (message) return res.status(status).json({ message });
     return res.status(201).json(match);
   } catch (e) {
     return res.status(404).json({ message: 'There is no team with such id!' });

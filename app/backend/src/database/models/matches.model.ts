@@ -15,8 +15,6 @@ class Matches extends Model<InferAttributes<Matches>, InferCreationAttributes<Ma
   declare awayTeamId: number;
   declare awayTeamGoals: number;
   declare inProgress: boolean;
-  declare homeTeam?: Teams;
-  declare awayTeam?: Teams;
 }
 
 Matches.init({
@@ -37,19 +35,18 @@ Matches.init({
     field: 'home_team_goals',
   },
   awayTeamId: {
-    type: DataTypes.DATE,
+    type: DataTypes.INTEGER,
     allowNull: false,
     field: 'away_team_id',
   },
   awayTeamGoals: {
-    type: DataTypes.STRING,
+    type: DataTypes.INTEGER,
     allowNull: false,
     field: 'away_team_goals',
   },
   inProgress: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
-    defaultValue: false,
     field: 'in_progress',
   },
 }, {
